@@ -23,7 +23,7 @@ function minimalSuite(overrides: Record<string, unknown> = {}) {
 describe('parseConfig', () => {
   it('applies defaults for a minimal config', () => {
     const config = parseConfig(minimalSuite());
-    expect(config.model).toBe('claude-sonnet-5');
+    expect(config.model).toBe('claude-sonnet-5-5');
     expect(config.repetitions).toBe(5);
     expect(config.thinking.enabled).toBe(true);
     expect(config.thinking.budgetTokens).toBe(8192);

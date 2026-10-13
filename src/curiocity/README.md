@@ -141,10 +141,10 @@ Top-level config sketch:
 ```jsonc
 {
   "codingagents": { "claude-code": { /* profile */ }, "codex": { /* profile */ } },
-  "models":  { "fast": "anthropic/claude-haiku-4-5", "workhorse": "anthropic/claude-sonnet-5" },
+  "models":  { "fast": "anthropic/claude-haiku-5-5", "workhorse": "anthropic/claude-sonnet-5-5" },
   "pricing": {                                      // optional; enables $ in cost-rollup
-    "anthropic/claude-haiku-4-5":  { "inputPer1M": 1.0, "outputPer1M": 5.0 },
-    "anthropic/claude-sonnet-5": { "inputPer1M": 3.0, "outputPer1M": 15.0 }
+    "anthropic/claude-haiku-5-5":  { "inputPer1M": 0.10, "outputPer1M": 0.50 },
+    "anthropic/claude-sonnet-5-5": { "inputPer1M": 2.0, "outputPer1M": 10.0 }
   },
   "provision": { "mcps": [], "plugins": [] },
   "setup": [], "teardown": [],
@@ -162,12 +162,12 @@ Top-level config sketch:
 
 Three harness roles map to `"provider/model"` strings: `fast` (high-frequency classification), `workhorse` (question replies), `judge` (defaults to workhorse). Providers: `anthropic`, `openai` (add one = dependency + a line in `llm/providers.ts`).
 
-**Canonical current Anthropic model ids** (use these exactly; don't invent variants): Haiku 4.5 = `claude-haiku-4-5`, Sonnet 5 = `claude-sonnet-5`, Opus 4.8 = `claude-opus-4-8`. Curiocity's harness-role strings take an `anthropic/` provider prefix (e.g. `anthropic/claude-sonnet-5`); the agent's own `agentModel` field takes the bare id (e.g. `claude-sonnet-5`).
+**Canonical current Anthropic model ids** (use these exactly; don't invent variants): Haiku 5.5 = `claude-haiku-5-5`, Sonnet 5.5 = `claude-sonnet-5-5`, Opus 5.5 = `claude-opus-5-5`. Curiocity's harness-role strings take an `anthropic/` provider prefix (e.g. `anthropic/claude-sonnet-5-5`); the agent's own `agentModel` field takes the bare id (e.g. `claude-sonnet-5-5`).
 
 The **agent's own model/effort** is a separate dimension from the harness roles: set `agentModel`/`agentEffort` on the profile, per-case, or via `--agent-model`/`--agent-effort`.
 
 **Cost policy — track and warn, never abort.** Aborting mid-suite contaminates benchmark results.
-- Cheap tier is the default for the bulk of testing: Claude Code on **Sonnet at low reasoning effort** (supports auto permission mode; Haiku does not), Codex on **gpt-5.4-mini**. Reserve smarter/full-effort models for final validation.
+- Cheap tier is the default for the bulk of testing: Claude Code on **Sonnet at low reasoning effort** (supports auto permission mode; Haiku does not), Codex on **gpt-6-luna**. Reserve smarter/full-effort models for final validation.
 - Token counts are always reported. Dollar amounts come only from the config `pricing` map; unpriced models report tokens-only with a warning.
 - An optional `budgetUsd` over-budget warns once and keeps going.
 

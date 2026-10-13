@@ -232,3 +232,12 @@ Master `<req>` shape = `requirements-authoring/SKILL.md` inline `<requirement_un
 
 ### User-Facing Skill Descriptions: Decide The Purpose First, Never Paraphrase The README [ACTIVE]
 Skill `README.md` files are maintainer docs; paraphrasing their sections yields mechanism sentences a newcomer cannot act on. Decide what the skill is FOR, then write. Never let a section name, filename, or single example become the subject — `codemap` is orientation (generating the file is its fallback), `research` is not about libraries. State the output in the reader's terms (business specs, test cases, fix tasks) and the scope at its widest true point, not at an example. Balance named distinguishing features WITH the value; engineering vocabulary (IaC, OODA, EARS, blast radius) is fine, Rosetta-internal jargon is not. Root `README.md` `## Skills` one-liners are mirrored as the second paragraph of each skill README — edit both.
+
+### Judge A Mapping Rule On The Original Text, Before Any Rewrite That Can Create The Same Pattern [ACTIVE]
+"Where luna and sonnet appear together, use haiku" must be applied to the pre-upgrade files. Rewriting terra to luna first creates ~30 new luna+sonnet pairs in heavy-reasoning agents that must keep sonnet. Order the rules: the rule that reads the original text runs first, token renames after, dedupe last.
+
+### New Model Generations Can Reject Parameters Older Ones Accepted — Check Every Hard-Coded Request Field [ACTIVE]
+`thinking: {type: "disabled"}` is a 400 on Opus 5.5 and Sonnet 5.5. Changing a default model id without reading the request code (here the `rosettify-prompts` judge calls) breaks the tool at runtime while the unit tests, which mock the client, stay green. Grep for `thinking`, `budget_tokens`, sampling parameters and forced `tool_choice` whenever a model id changes.
+
+### `scripts/pre_commit.py` Regenerates Plugins With The PUBLISHED Generator [ACTIVE]
+It runs `npx -y rosettify-plugins@latest`, so a local change to `model-maps.ts` is ignored and the old maps overwrite the plugin tree. After editing the generator: run pre-commit first, then build locally (`npm run build` in `src/rosettify-plugins`) and run `node dist/cli.js --source <repo> --release r3 --deterministic-hooks false` (and again with `--profile lightweight`). Until the new version is published, any later pre-commit run drifts `plugins/` back.

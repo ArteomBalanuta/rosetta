@@ -117,7 +117,7 @@ npx -y rosettify-prompts@latest optimize \
   --supporting my-special-context.md \
   --additional "Prefer terse wording; keep examples concrete." \
   --out results/optimized-prompt \
-  --model claude-sonnet-5 \
+  --model claude-sonnet-5-5 \
   --max-output-tokens 32000
 ```
 
@@ -171,7 +171,7 @@ is one experiment: a set of variants to compare against each other.
 
 ```jsonc
 {
-  "model": "claude-sonnet-5",
+  "model": "claude-sonnet-5-5",
   "maxOutputTokens": 16384,
   "thinking": { "enabled": true, "mode": "adaptive", "effort": "high" },
   "repetitions": 5,
@@ -203,7 +203,7 @@ Fields:
 - `thinking.mode`:
   - `"adaptive"` (default): depth is controlled by `effort`
     (`low`/`medium`/`high`/`xhigh`/`max`). Required by current-gen models
-    (`claude-sonnet-5`, `claude-opus-4-7`/`4-8`, and later).
+    (`claude-sonnet-5-5`, `claude-opus-5-5`, `claude-opus-4-7`/`4-8`, and later).
   - `"manual"`: depth is controlled by `budgetTokens`. Only works on older
     models; `budget_tokens` is deprecated or rejected on newer ones.
 - `suites[].variants[].turns`: the whole point. An ordered list of user
