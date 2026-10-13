@@ -107,7 +107,9 @@ The conversation is:
 - A **mid value-lost review** after step 3, restoring anything the proposals so
   far weakened.
 - **Finalize-draft**: materialize accepted proposals into complete files.
-- **Final value-lost audit**: a last pass comparing originals vs the draft.
+- **Final value-lost audit**: a last pass comparing originals vs the draft; restores
+  only truly missing value, tersely, without re-adding decisions or direction text
+  that compression removed.
 
 ```bash
 npx -y rosettify-prompts@latest optimize \
