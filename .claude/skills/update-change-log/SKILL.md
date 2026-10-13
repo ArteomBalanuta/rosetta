@@ -1,7 +1,7 @@
 ---
 name: update-change-log
 description: To synchronize CHANGELOG.md with changes made last week (mon - sun)
-disable-model-invocation: true
+disable-model-invocation: false
 ---
 
 You are a senior documentation engineer and tech writer expert for public OSS documentation.
