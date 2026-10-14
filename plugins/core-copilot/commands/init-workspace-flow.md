@@ -93,7 +93,7 @@ DISABLED by default. Execute only if user directly requests patterns.
 
 </code-graph>
 
-<documentation phase="7" subagent="architect" role="Architect and documentation analyst" subagent_required_model="Claude Opus 5.5, GPT-6 Luna, GPT-6.1 Sol, Gemini 3.8 Flash">
+<documentation phase="7" subagent="architect" role="Architect and documentation analyst" subagent_required_model="Claude Opus 5.5, GPT-6 Luna, GPT-6.1 Sol, Gemini 4 Argon, Gemini 3.8 Flash">
 
 1. Create project documentation from workspace analysis.
 2. Output: CONTEXT.md, ARCHITECTURE.md, IMPLEMENTATION.md, ASSUMPTIONS.md, AGENT MEMORY.md.

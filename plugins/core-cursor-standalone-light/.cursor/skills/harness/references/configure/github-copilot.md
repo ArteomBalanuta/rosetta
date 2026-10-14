@@ -162,6 +162,7 @@ applyTo: "src/api/**/*.ts"
 - `Claude Haiku 5.5` - Anthropic Claude 5.5 Haiku with thinking
 - `GPT-6.1 Sol` - OpenAI GPT 6.1 Sol (architect)
 - `GPT-6 Luna` - OpenAI GPT 6 Luna with high reasoning efforts
+- `Gemini 4 Argon` - Google Gemini 4 Argon
 - `Gemini 3.8 Flash` - Google Gemini 3.8 Flash
 - `Grok 4.7` - xAI Grok 4.7
 - `Claude Opus 4.8` - Anthropic Claude 4.8 Opus (most capable, with extended reasoning)

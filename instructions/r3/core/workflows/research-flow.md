@@ -32,7 +32,7 @@ Orchestrates deep research via meta-prompting: craft an optimized research promp
 
 </context_load>
 
-<prompt_craft phase="2" subagent="researcher" role="Research prompt architect" subagent_required_model="claude-opus-5-5, gpt-6-luna-xhigh, gpt-6.1-sol-high, gemini-3.8-flash-high">
+<prompt_craft phase="2" subagent="researcher" role="Research prompt architect" subagent_required_model="claude-opus-5-5, gpt-6-luna-xhigh, gpt-6.1-sol-high, gemini-4-argon-high, gemini-3.8-flash-high">
 
 1. Create an optimized research prompt for the user request.
 2. Save as `research-prompt.md` in FEATURE PLAN folder. Output ONLY the optimized prompt.

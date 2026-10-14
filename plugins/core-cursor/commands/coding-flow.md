@@ -48,7 +48,7 @@ Validation: Each phase produces verifiable outputs; reviewer catches issues befo
 
 </discovery>
 
-<design phase="2" applies="ALL" subagent="architect" role="Design architecture requirements and solution" subagent_required_model="claude-opus-5-5, gpt-6.1-sol, gemini-3.8-flash">
+<design phase="2" applies="ALL" subagent="architect" role="Design architecture requirements and solution" subagent_required_model="claude-opus-5-5, gpt-6.1-sol, gemini-4-argon, gemini-3.8-flash">
 
 1. Step 1: discover affected and related code to design architecture requirements to address user request fully.
 2. Step 2: design 3 best architecture solutions on high level with pro/cons analysis.
@@ -69,7 +69,7 @@ Validation: Each phase produces verifiable outputs; reviewer catches issues befo
 
 </user_review_design>
 
-<tech_plan phase="4" applies="ALL" subagent="architect" role="Senior architect defining specs and plan" subagent_required_model="claude-opus-5-5, gpt-6.1-sol, gemini-3.8-flash">
+<tech_plan phase="4" applies="ALL" subagent="architect" role="Senior architect defining specs and plan" subagent_required_model="claude-opus-5-5, gpt-6.1-sol, gemini-4-argon, gemini-3.8-flash">
 
 1. MUST USE SKILL `tech-specs` and `planning` together. Split: specs own WHAT, plan owns HOW. Target: 100% clarity.
 2. Input: discovery notes, user request, `ARCHITECTURE.md`. Output: `plans/<FEATURE>/<FEATURE>-SPECS.md` + `plans/<FEATURE>/<FEATURE>-PLAN.md`.

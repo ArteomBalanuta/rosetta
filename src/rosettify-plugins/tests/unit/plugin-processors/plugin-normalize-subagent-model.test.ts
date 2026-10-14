@@ -99,6 +99,29 @@ describe('pluginNormalizeSubagentRequiredModel — end-to-end with the new vocab
   });
 });
 
+describe('pluginNormalizeSubagentRequiredModel — gemini-4-argon beside gemini-3.8-flash (architect list shape)', () => {
+  const content =
+    'subagent_required_model="claude-opus-5-5, gpt-6.1-sol-high, gemini-4-argon-high, gemini-3.8-flash-high"';
+
+  it('Claude vocabulary: Argon is not claude-compatible, only the opus token survives', () => {
+    expect(normalize(content, CLAUDE_VOCABULARY, claudeSubagentModelTokenMapper)).toBe(
+      'subagent_required_model="claude-opus-5-5"',
+    );
+  });
+
+  it('Cursor vocabulary: Argon survives as gemini-4-argon, before gemini-3.8-flash, in source order', () => {
+    expect(normalize(content, CURSOR_VOCABULARY, cursorSubagentModelTokenMapper)).toBe(
+      'subagent_required_model="claude-opus-5-5, gpt-6.1-sol, gemini-4-argon, gemini-3.8-flash"',
+    );
+  });
+
+  it('Copilot vocabulary: Argon survives as the Copilot display name Gemini 4 Argon', () => {
+    expect(normalize(content, COPILOT_VOCABULARY, copilotSubagentModelTokenMapper)).toBe(
+      'subagent_required_model="Claude Opus 5.5, GPT-6.1 Sol, Gemini 4 Argon, Gemini 3.8 Flash"',
+    );
+  });
+});
+
 describe('pluginNormalizeSubagentRequiredModel — Claude mapper, real fixtures', () => {
   it('A: filters to the opus family and maps through the built-in Claude vocabulary', () => {
     expect(
@@ -133,8 +156,8 @@ describe('pluginNormalizeSubagentRequiredModel — Claude mapper, real fixtures'
 });
 
 // The expected values below changed because every legacy Claude/GPT/Gemini/Grok token these fixtures
-// carry upgrades forward to its Claude 5.5 / GPT-6.1 Sol / GPT-6 Luna / Gemini 3.8 Flash / Grok 4.7
-// successor (same idiom as the existing grok-4.5 upgrade). Two consequences follow purely from that
+// carry upgrades forward to its Claude 5.5 / GPT-6.1 Sol / GPT-6 Luna / Gemini 4 Argon (Pro tier) or
+// Gemini 3.8 Flash (every other Gemini) / Grok 4.7 successor (same idiom as the existing grok-4.5 upgrade). Two consequences follow purely from that
 // value change, not from any change to the filtering/dedup rule itself: (1) a legacy token and a
 // same-tier current token appearing in the same fixture can map to the SAME value and collapse under
 // the existing first-occurrence dedup (the old terra tier and the luna tier now share gpt-6-luna);
@@ -142,10 +165,11 @@ describe('pluginNormalizeSubagentRequiredModel — Claude mapper, real fixtures'
 describe('pluginNormalizeSubagentRequiredModel — Cursor mapper, real fixtures', () => {
   it('A: filters to tokens present in the merged Cursor map, source order preserved, upgraded tokens de-duplicated', () => {
     // gpt-5.5-high and the fixture's own gpt-5.6-sol both now map to 'gpt-6.1-sol', so they collapse
-    // to one survivor, keeping the first occurrence.
+    // to one survivor, keeping the first occurrence. gemini-3.1-pro-high (effort-qualified Pro token, a
+    // key since the Argon change; it was unmapped and dropped before) resolves to 'gemini-4-argon'.
     expect(
       normalize(`subagent_required_model="${FIXTURE_A}"`, CURSOR_VOCABULARY, cursorSubagentModelTokenMapper),
-    ).toBe('subagent_required_model="claude-opus-5-5, gpt-6.1-sol"');
+    ).toBe('subagent_required_model="claude-opus-5-5, gpt-6.1-sol, gemini-4-argon"');
   });
 
   it('D: same filtering with the gpt- token appearing FIRST in source order (not IDE priority order), upgraded tokens de-duplicated', () => {
@@ -153,7 +177,7 @@ describe('pluginNormalizeSubagentRequiredModel — Cursor mapper, real fixtures'
     // collapse to one survivor, keeping the first (source-order) occurrence.
     expect(
       normalize(`subagent_required_model="${FIXTURE_D}"`, CURSOR_VOCABULARY, cursorSubagentModelTokenMapper),
-    ).toBe('subagent_required_model="gpt-6-luna, gemini-3.8-flash, claude-sonnet-5-5, grok-4.7"');
+    ).toBe('subagent_required_model="gpt-6-luna, gemini-4-argon, claude-sonnet-5-5, grok-4.7"');
   });
 });
 
@@ -163,7 +187,7 @@ describe('pluginNormalizeSubagentRequiredModel — Copilot mapper, real fixtures
     // collapse to one survivor, keeping the first (source-order) occurrence.
     expect(
       normalize(`subagent_required_model="${FIXTURE_C}"`, COPILOT_VOCABULARY, copilotSubagentModelTokenMapper),
-    ).toBe('subagent_required_model="Claude Sonnet 5.5, GPT-6 Luna, Gemini 3.8 Flash"');
+    ).toBe('subagent_required_model="Claude Sonnet 5.5, GPT-6 Luna, Gemini 4 Argon"');
   });
 
   it('C: grok is still absent from the Copilot list — no Copilot identifier for it is established here', () => {

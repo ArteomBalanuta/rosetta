@@ -17,7 +17,7 @@ If request is trivial / one-liner AND you confirmed it is true (by checking code
 
 <models>
 
-- large (smart, slow): claude-opus-5-5, gpt-6-luna-xhigh, gpt-6.1-sol-high, gemini-3.8-flash-high, kimi-k3, glm-5.2
+- large (smart, slow): claude-opus-5-5, gpt-6-luna-xhigh, gpt-6.1-sol-high, gemini-4-argon-high, gemini-3.8-flash-high, kimi-k3, glm-5.2
 - medium (workhorse): claude-sonnet-5-5, gpt-6-luna-high, glm-5, kimi-k2.5, minimax-m2.5, grok-4.7
 - small (fast): claude-haiku-5-5, gpt-6-luna, gpt-6-luna-medium, gemini-3.8-flash-low
 

@@ -165,11 +165,20 @@ describe('fileNormalizeCopilotModels — gemini token to display name', () => {
     expect((result.source[0]?.frontmatter as any).model).toBe('Gemini 3.8 Flash');
   });
 
-  it('gemini-3.1-pro → COPILOT_GEMINI_MAP → Gemini 3.8 Flash', () => {
+  it('gemini-3.1-pro → COPILOT_GEMINI_MAP → Gemini 4 Argon (Pro tier resolves forward, not to Flash)', () => {
     const content = '---\nmodel: gemini-3.1-pro\ntags: []\n---\n# Body\n';
     const frame = makeFrame(content, 'gemini-3.1-pro');
     const result = fileNormalizeCopilotModels(frame, makeCtx());
-    expect(result.target_contents as string).toContain('model: Gemini 3.8 Flash');
+    expect(result.target_contents as string).toContain('model: Gemini 4 Argon');
+    expect(result.target_contents as string).not.toContain('Gemini 3.8 Flash');
+  });
+
+  it('gemini-4-argon-high → COPILOT_GEMINI_MAP → Gemini 4 Argon (effort suffix dropped)', () => {
+    const content = '---\nmodel: gemini-4-argon-high\ntags: []\n---\n# Body\n';
+    const frame = makeFrame(content, 'gemini-4-argon-high');
+    const result = fileNormalizeCopilotModels(frame, makeCtx());
+    expect(result.target_contents as string).toContain('model: Gemini 4 Argon\n');
+    expect((result.source[0]?.frontmatter as any).model).toBe('Gemini 4 Argon');
   });
 
   // #197 — this token had no Copilot key, so it fell through normalizeCopilot's passthrough and the

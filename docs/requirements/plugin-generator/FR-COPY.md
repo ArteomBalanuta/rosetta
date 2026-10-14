@@ -161,7 +161,7 @@ The files a target keeps but never generates — the IDE manifest, hook template
   <priority>Must</priority>
   <status>Approved</status>
   <approved_by>User</approved_by>
-  <changed>2026-10-13</changed>
+  <changed>2026-10-14</changed>
   <verification>Test</verification>
   <acceptance>
     <criteria>Given: `model: claude-4.8-opus-high, gpt-5.5-high` When: normalized for Claude Then: result is `claude-opus-5-5` (no exact entry for this token; resolved by the `opus` tier key).</criteria>
@@ -179,7 +179,7 @@ The files a target keeps but never generates — the IDE manifest, hook template
   </acceptance>
   <implementation>Implemented</implementation>
   <implementationNotes>Implemented: src/rosettify-plugins/src/spec/model-maps.ts (normalizeClaude(field, map, exhaustive): scan for the first claude-compatible token, resolved by the shared claudeLookup() helper — exact source token key first, then family key opus/sonnet/haiku — read from the effective map, skip-and-continue when neither tier resolves, non-exhaustive fallback inherit, exhaustive no-survivor MODEL_DROP; CLAUDE_CODE_MAP carries the three family keys plus the claude-5-opus-high/claude-5-opus/claude-opus-5/claude-opus-5-high/claude-opus-5-5/claude-opus-5-5-high exact keys, all resolving to claude-opus-5-5); consumed by src/rosettify-plugins/src/file-processors/file-normalize-claude-models.ts. Tests: tests/unit/spec/model-maps.test.ts, tests/unit/file-processors/file-normalize-claude-models.test.ts.</implementationNotes>
-  <notes>Concrete target examples (r3): architect `claude-opus-5-5-high, gpt-6.1-sol-high, gemini-3.8-flash-high, grok-4.7-high` → `claude-opus-5-5` (exact tier); light-profile architect `claude-opus-5-5-high, gpt-6.1-sol-high, grok-4.7-high, gpt-6-luna-xhigh, claude-sonnet-5-5-xhigh, gemini-3.8-flash-high` → `claude-opus-5-5` (exact tier); reviewer `gpt-6-luna-high, gemini-3.8-flash-high, claude-sonnet-5-5, grok-4.7-medium` → `claude-sonnet-5-5`; validator `gpt-6-luna-high, gemini-3.8-flash-high, claude-sonnet-5-5, grok-4.7-medium` → `claude-sonnet-5-5`; executor `claude-haiku-5-5, gpt-6-luna-medium, gemini-3.8-flash-low, composer-2.5, grok-4.7-low` → `claude-haiku-5-5`; light-profile engineer, reviewer, validator and researcher (e.g. `gpt-6-luna-xhigh, claude-haiku-5-5-high, gemini-3.8-flash-medium, grok-4.7-medium, composer-2.5`) → `claude-haiku-5-5` (family tier).</notes>
+  <notes>Concrete target examples (r3): architect `claude-opus-5-5-high, gpt-6.1-sol-high, gemini-4-argon-high, gemini-3.8-flash-high, grok-4.7-high` → `claude-opus-5-5` (exact tier); light-profile architect `claude-opus-5-5-high, gpt-6.1-sol-high, grok-4.7-high, gpt-6-luna-xhigh, claude-sonnet-5-5-xhigh, gemini-4-argon-high, gemini-3.8-flash-high` → `claude-opus-5-5` (exact tier); reviewer `gpt-6-luna-high, gemini-3.8-flash-high, claude-sonnet-5-5, grok-4.7-medium` → `claude-sonnet-5-5`; validator `gpt-6-luna-high, gemini-3.8-flash-high, claude-sonnet-5-5, grok-4.7-medium` → `claude-sonnet-5-5`; executor `claude-haiku-5-5, gpt-6-luna-medium, gemini-3.8-flash-low, composer-2.5, grok-4.7-low` → `claude-haiku-5-5`; light-profile engineer, reviewer, validator and researcher (e.g. `gpt-6-luna-xhigh, claude-haiku-5-5-high, gemini-3.8-flash-medium, grok-4.7-medium, composer-2.5`) → `claude-haiku-5-5` (family tier).</notes>
 </req>
 
 <req id="FR-COPY-0022" type="FR" level="System" ticketId="" classification="technical">

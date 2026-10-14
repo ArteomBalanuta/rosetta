@@ -134,7 +134,7 @@ describe('normalizeCursor', () => {
   });
 });
 
-// ─── Cursor: current vocabulary entries (GPT-6.1 Sol / GPT-6 Luna, Gemini 3.8 Flash, Grok 4.7, Claude 5.5) ──
+// ─── Cursor: current vocabulary entries (GPT-6.1 Sol / GPT-6 Luna, Gemini 4 Argon / 3.8 Flash, Grok 4.7, Claude 5.5) ──
 
 describe('normalizeCursor — current vocabulary entries', () => {
   it('maps gpt-6.1-sol-high to gpt-6.1-sol and gpt-6-luna-xhigh to gpt-6-luna', () => {
@@ -152,6 +152,19 @@ describe('normalizeCursor — current vocabulary entries', () => {
   it('maps gemini-3.8-flash-medium and the superseded gemini-3.7-flash-medium to gemini-3.8-flash', () => {
     expect(normalizeCursor('gemini-3.8-flash-medium', CURSOR_VOCABULARY.map)).toBe('gemini-3.8-flash');
     expect(normalizeCursor('gemini-3.7-flash-medium', CURSOR_VOCABULARY.map)).toBe('gemini-3.8-flash');
+  });
+
+  it('maps gemini-4-argon in every effort form to gemini-4-argon (Cursor id, no effort suffix)', () => {
+    for (const token of ['gemini-4-argon', 'gemini-4-argon-low', 'gemini-4-argon-medium', 'gemini-4-argon-high', 'gemini-4-argon-xhigh']) {
+      expect(normalizeCursor(token, CURSOR_VOCABULARY.map), token).toBe('gemini-4-argon');
+    }
+  });
+
+  it('resolves every Gemini Pro token forward to gemini-4-argon, bare and effort-qualified — not to Flash', () => {
+    for (const base of ['gemini-3-pro', 'gemini-3-pro-preview', 'gemini-3.1-pro', 'gemini-3.1-pro-preview']) {
+      expect(normalizeCursor(base, CURSOR_VOCABULARY.map), base).toBe('gemini-4-argon');
+      expect(normalizeCursor(`${base}-high`, CURSOR_VOCABULARY.map), `${base}-high`).toBe('gemini-4-argon');
+    }
   });
 
   it('maps grok-4.7-medium and the superseded grok-4.6-medium to grok-4.7', () => {
@@ -219,7 +232,7 @@ describe('normalizeCopilot', () => {
   });
 });
 
-// ─── Copilot: current vocabulary entries (GPT-6.1 Sol / GPT-6 Luna, Gemini 3.8 Flash, Claude 5.5) ──
+// ─── Copilot: current vocabulary entries (GPT-6.1 Sol / GPT-6 Luna, Gemini 4 Argon / 3.8 Flash, Claude 5.5) ──
 
 describe('normalizeCopilot — current vocabulary entries', () => {
   it('maps gpt-6-luna-xhigh to GPT-6 Luna and gpt-6.1-sol-high to GPT-6.1 Sol', () => {
@@ -238,14 +251,27 @@ describe('normalizeCopilot — current vocabulary entries', () => {
     expect(normalizeCopilot('gemini-3.7-flash-low', COPILOT_VOCABULARY.map)).toBe('Gemini 3.8 Flash');
   });
 
+  it('maps gemini-4-argon in every effort form to the Copilot display name Gemini 4 Argon', () => {
+    for (const token of ['gemini-4-argon', 'gemini-4-argon-low', 'gemini-4-argon-medium', 'gemini-4-argon-high', 'gemini-4-argon-xhigh']) {
+      expect(normalizeCopilot(token, COPILOT_VOCABULARY.map), token).toBe('Gemini 4 Argon');
+    }
+  });
+
+  it('resolves every Gemini Pro token forward to Gemini 4 Argon, bare and effort-qualified — not to Flash', () => {
+    for (const base of ['gemini-3-pro', 'gemini-3-pro-preview', 'gemini-3.1-pro', 'gemini-3.1-pro-preview']) {
+      expect(normalizeCopilot(base, COPILOT_VOCABULARY.map), base).toBe('Gemini 4 Argon');
+      expect(normalizeCopilot(`${base}-high`, COPILOT_VOCABULARY.map), `${base}-high`).toBe('Gemini 4 Argon');
+    }
+  });
+
   it('maps effort-qualified Claude tokens to display names instead of passing them through raw', () => {
     expect(normalizeCopilot('claude-sonnet-5-5-medium', COPILOT_VOCABULARY.map)).toBe('Claude Sonnet 5.5');
     expect(normalizeCopilot('claude-haiku-5-5-high', COPILOT_VOCABULARY.map)).toBe('Claude Haiku 5.5');
   });
 
   // #197 — the superseded Flash token used to have no Copilot key, so normalizeCopilot's passthrough
-  // returned the raw lowercase id while Cursor upgraded the same token. FR-ARCH-0057: "every
-  // `gemini-*` token shall map to `gemini-3.8-flash`".
+  // returned the raw lowercase id while Cursor upgraded the same token. FR-ARCH-0057: every `gemini-*`
+  // token outside the Pro tier shall map to `gemini-3.8-flash`.
   it('maps the superseded gemini-3.5-flash forward to Gemini 3.8 Flash, matching Cursor (#197)', () => {
     expect(normalizeCopilot('gemini-3.5-flash', COPILOT_VOCABULARY.map)).toBe('Gemini 3.8 Flash');
     // Not the raw passthrough, and not the superseded display name.
@@ -455,7 +481,9 @@ describe('merged Cursor/Copilot effective map (claude+gpt+gemini, FR-ARCH-0059)'
     expect(CURSOR_VOCABULARY.map['claude-sonnet-5']).toBe('claude-sonnet-5-5'); // superseded key, value moved forward
     expect(CURSOR_VOCABULARY.map['claude-sonnet-5-5']).toBe('claude-sonnet-5-5');
     expect(CURSOR_VOCABULARY.map['gpt-5.4-medium']).toBe('gpt-6-luna');
-    expect(CURSOR_VOCABULARY.map['gemini-3.1-pro']).toBe('gemini-3.8-flash');
+    expect(CURSOR_VOCABULARY.map['gemini-3.1-pro']).toBe('gemini-4-argon'); // Pro tier, value moved forward
+    expect(CURSOR_VOCABULARY.map['gemini-3-pro']).toBe('gemini-4-argon');
+    expect(CURSOR_VOCABULARY.map['gemini-3-flash']).toBe('gemini-3.8-flash');
   });
 
   it('COPILOT_VOCABULARY.map resolves a claude key, a gpt key, and a gemini key', () => {
@@ -463,38 +491,47 @@ describe('merged Cursor/Copilot effective map (claude+gpt+gemini, FR-ARCH-0059)'
     expect(COPILOT_VOCABULARY.map['claude-sonnet-5-5']).toBe('Claude Sonnet 5.5');
     expect(COPILOT_VOCABULARY.map['gpt-5.4-medium']).toBe('GPT-6 Luna');
     expect(COPILOT_VOCABULARY.map['gemini-3-flash']).toBe('Gemini 3.8 Flash');
+    expect(COPILOT_VOCABULARY.map['gemini-3.1-pro']).toBe('Gemini 4 Argon'); // Pro tier, value moved forward
+    expect(COPILOT_VOCABULARY.map['gemini-3-pro']).toBe('Gemini 4 Argon');
   });
 
   it('normalizeCursor resolves a gemini token via the merged map (first-token strategy)', () => {
     expect(normalizeCursor('gemini-3.1-pro-preview, claude-sonnet-5', CURSOR_VOCABULARY.map)).toBe(
-      'gemini-3.8-flash',
+      'gemini-4-argon',
     );
   });
 
   it('normalizeCopilot resolves a gemini token via the merged map (first-token strategy)', () => {
     expect(normalizeCopilot('gemini-3.1-pro-preview, claude-sonnet-5', COPILOT_VOCABULARY.map)).toBe(
-      'Gemini 3.8 Flash',
+      'Gemini 4 Argon',
     );
+  });
+
+  it('Claude and Codex vocabularies do not name gemini-4-argon (not claude-compatible, not gpt-)', () => {
+    expect(normalizeClaude('gemini-4-argon-high', CLAUDE_VOCABULARY.map)).toBeNull();
+    expect(normalizeCodex('gemini-4-argon-high', CODEX_VOCABULARY.map)).toBeNull();
+    expect(normalizeClaude('gemini-4-argon-high, claude-opus-5-5', CLAUDE_VOCABULARY.map)).toBe('claude-opus-5-5');
   });
 });
 
 // ─── Key-disjointness guard: merge order cannot matter (FR-ARCH-0059) ───────────────────────────
-// Cursor merges 5 per-vendor maps (claude/gpt/gemini/grok/composer = 80+50+15+11+1 = 157 keys);
-// Copilot merges 3 (claude/gpt/gemini = 80+50+15 = 145 keys, no grok/composer). Most keys come from
+// Cursor merges 5 per-vendor maps (claude/gpt/gemini/grok/composer = 80+50+38+11+1 = 180 keys);
+// Copilot merges 3 (claude/gpt/gemini = 80+50+38 = 168 keys, no grok/composer). The Gemini map is
+// 5 Pro-tier/Argon bases x 5 forms + 2 Flash bases x 5 forms + 3 bare superseded Flash keys = 38. Most keys come from
 // effortForms(): each base token contributes itself plus its -xhigh/-high/-medium/-low forms (5 keys).
 // If the per-vendor prefixes ever collided, the spread merge in CURSOR_VOCABULARY/COPILOT_VOCABULARY
 // would silently drop a key and this count would fall below the expected total.
 
 describe('merged vocabulary key disjointness (FR-ARCH-0059)', () => {
-  it('CURSOR_VOCABULARY.map has exactly 157 keys — the 5 per-vendor source maps never collide', () => {
+  it('CURSOR_VOCABULARY.map has exactly 180 keys — the 5 per-vendor source maps never collide', () => {
     const keys = Object.keys(CURSOR_VOCABULARY.map);
-    expect(keys.length).toBe(157);
+    expect(keys.length).toBe(180);
     expect(new Set(keys).size).toBe(keys.length);
   });
 
-  it('COPILOT_VOCABULARY.map has exactly 145 keys — the 3 per-vendor source maps never collide', () => {
+  it('COPILOT_VOCABULARY.map has exactly 168 keys — the 3 per-vendor source maps never collide', () => {
     const keys = Object.keys(COPILOT_VOCABULARY.map);
-    expect(keys.length).toBe(145);
+    expect(keys.length).toBe(168);
     expect(new Set(keys).size).toBe(keys.length);
   });
 });

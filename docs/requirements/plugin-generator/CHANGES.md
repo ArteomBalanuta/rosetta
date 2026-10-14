@@ -1,5 +1,22 @@
 # plugin-generator — Requirements Change Log
 
+## 2026-10-14 — Gemini 4 Argon takes the Gemini Pro tier; other Gemini tokens stay on Gemini 3.8 Flash
+
+**Files:** `FR-ARCH.md`, `FR-COPY.md`, `docs/ARCHITECTURE.md`
+
+**Source:** user request 2026-10-14: use `gemini-4-argon` instead of `gemini-3-pro` and `gemini-3.1-pro`, and list it right before `gemini-3.8-flash` wherever a list holds both `gemini-3.8-flash` and an opus token. Cursor id `gemini-4-argon` was confirmed by the owner from Cursor; the Copilot display name `Gemini 4 Argon` follows Copilot's own format and is not yet checked against Copilot's published list (`docs/TODO.md`).
+
+- `FR-ARCH-0057` statement: the "every `gemini-*` → `gemini-3.8-flash`" rule is split. The Pro tier (`gemini-3-pro`, `gemini-3-pro-preview`, `gemini-3.1-pro`, `gemini-3.1-pro-preview`) and `gemini-4-argon`, in each effort variant, → `gemini-4-argon` (`Gemini 4 Argon` on Copilot); every other `gemini-*` token → `gemini-3.8-flash`. The effort-suffix sentence now names both target ids. `gemini-3-pro*` was not keyed before; it is now. The superseded Pro keys keep their keys and resolve FORWARD to the current model of their tier (key-retention invariant).
+- `FR-ARCH-0057` criteria: one criterion added (Cursor and Copilot output for `gemini-4-argon-high`, `gemini-3.1-pro-preview`, `gemini-3-pro`; effort forms keyed; `subagent_required_model` keeps the token). `<changed>` -> 2026-10-14.
+- `FR-ARCH-0057` statement: the effort-suffix sentence's lead-in now reads "a Gemini token (superseded, or the current `gemini-4-argon`)" because Argon is authored directly. `FR-ARCH-0057` implementationNotes: Gemini map construction restated and the asserted merged key counts corrected (157/145 -> 180/168).
+- `FR-ARCH-0046` implementationNotes: map summary restated (Pro tier and `gemini-4-argon` -> `gemini-4-argon` / `Gemini 4 Argon`; every other gemini -> Flash). `<changed>` -> 2026-10-14.
+- `FR-COPY-0021` notes: the two concrete r3 architect examples now carry `gemini-4-argon-high` before `gemini-3.8-flash-high`; the Claude result is unchanged. `<changed>` -> 2026-10-14.
+- Consequence: on Cursor and Copilot the Gemini Pro tier no longer collapses into Flash. No `model:` field starts with a Gemini token in r3, so `gemini-4-argon` appears only in `subagent_required_model` guidance lists. Claude Code and Codex vocabularies are unchanged (Argon is neither claude-compatible nor `gpt-`); Antigravity stays `inherit`.
+- Merged map sizes asserted by the unit tests: Cursor 157 -> 180 keys, Copilot 145 -> 168 keys (Gemini block 15 -> 38 keys: the Pro tier and Argon gain effort forms).
+- `status`/`approved_by`/`implementation` unchanged on every unit - owner must re-approve FR-ARCH-0057 wording.
+
+---
+
 ## 2026-10-13 — model set moved to Claude 5.5, GPT-6.1 Sol / GPT-6 Luna, Gemini 3.8 Flash, Grok 4.7; terra tier folded into luna
 
 **Files:** `FR-ARCH.md`, `FR-COPY.md`, `FR-VAR.md`, `MODEL.md`, `docs/ARCHITECTURE.md`

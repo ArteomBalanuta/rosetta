@@ -167,6 +167,22 @@ describe('fileNormalizeCursorModels — gemini token mapping', () => {
     expect((result.source[0]?.frontmatter as any).model).toBe('gemini-3.8-flash');
   });
 
+  it('gemini-4-argon-high → CURSOR_GEMINI_MAP → gemini-4-argon (effort suffix dropped)', () => {
+    const content = '---\nmodel: gemini-4-argon-high\ntags: []\n---\n# Body\n';
+    const frame = makeFrame(content, 'gemini-4-argon-high');
+    const result = fileNormalizeCursorModels(frame, makeCtx());
+    expect(result.target_contents as string).toContain('model: gemini-4-argon\n');
+    expect((result.source[0]?.frontmatter as any).model).toBe('gemini-4-argon');
+  });
+
+  it('gemini-3.1-pro → CURSOR_GEMINI_MAP → gemini-4-argon (Pro tier resolves forward, not to Flash)', () => {
+    const content = '---\nmodel: gemini-3.1-pro\ntags: []\n---\n# Body\n';
+    const frame = makeFrame(content, 'gemini-3.1-pro');
+    const result = fileNormalizeCursorModels(frame, makeCtx());
+    expect(result.target_contents as string).toContain('model: gemini-4-argon\n');
+    expect(result.target_contents as string).not.toContain('gemini-3.8-flash');
+  });
+
   it('gemini-3.8-flash → CURSOR_GEMINI_MAP passthrough (already at the terminal value) → same frame', () => {
     // The current token maps to itself, so the rewrite is a no-op and the frame instance is returned.
     const content = '---\nmodel: gemini-3.8-flash\ntags: []\n---\n# Body\n';

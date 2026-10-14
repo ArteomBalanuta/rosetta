@@ -69,7 +69,7 @@ Run task-adaptive security review through mandatory canonical subagents. End wit
 - Control: HIGH+ → report-and-package only; CLEAN → model-and-select; ERROR → stop.
 </deterministic_gates>
 
-<model_and_select phase="4" applies="ALL" subagent="architect" role="Security architect mapping threats to complete contextual coverage" subagent_required_model="claude-opus-5-5, gpt-6.1-sol, gemini-3.8-flash" must-be-subagent>
+<model_and_select phase="4" applies="ALL" subagent="architect" role="Security architect mapping threats to complete contextual coverage" subagent_required_model="claude-opus-5-5, gpt-6.1-sol, gemini-4-argon, gemini-3.8-flash" must-be-subagent>
 - Purpose: Builds a threat model and maps applicable authorized areas, activities, tools, and exclusions. Produces the complete coverage plan for inspection dispatch.
 - Input: approved contract; permitted context; available tools.
 - Output: threat model and authorized coverage plan.

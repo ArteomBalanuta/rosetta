@@ -32,7 +32,7 @@ Agents without workspace documentation re-discover facts, repeat mistakes, and m
 3. Read state.mode, state.composite, state.file_count
 </read_state>
 
-<execute_documentation step="7.2" subagent="built-in" role="Senior technical writer synthesizing workspace documentation" subagent_recommended_model="claude-opus-5-5,gpt-6.1-sol-high,gemini-3.8-flash-high">
+<execute_documentation step="7.2" subagent="built-in" role="Senior technical writer synthesizing workspace documentation" subagent_recommended_model="claude-opus-5-5,gpt-6.1-sol-high,gemini-4-argon-high,gemini-3.8-flash-high">
 
 Act as a senior technical writer — recovers intent from code, not transcribes implementation. Workspaces lack structured documentation, forcing every session to re-discover facts and repeat mistakes. This creates five foundational docs from source code analysis. Proof: all five docs exist, are non-empty, complementary, and track unknowns.
 

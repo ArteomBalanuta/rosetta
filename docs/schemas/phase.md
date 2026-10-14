@@ -19,9 +19,9 @@ baseSchema: docs/schemas/phase.md
 
 [ONLY FOR TEMPLATE EXECUTOR: imperative bullet points, shorter lines, distinguish references to repository files vs instructions; skill/subagent names will be in context already, so just reference it. the rest of instruction folder files: rules/templates/workflows/assets/subfolders of skill/etc must be loaded via the typed aliases (USE SKILL/FLOW, INVOKE SUBAGENT, APPLY PHASE, READ|APPLY RULE|TEMPLATE|SKILL FILE, LIST) to be used]
 
-[Latest Models: Anthropic (claude-opus-5-5, claude-sonnet-5-5, claude-haiku-5-5), OpenAI (gpt-6.1-sol, gpt-6-luna), Google (gemini-3.8-flash), Cursor (grok-4.7, composer-2.5), Z.ai (glm-5).]
+[Latest Models: Anthropic (claude-opus-5-5, claude-sonnet-5-5, claude-haiku-5-5), OpenAI (gpt-6.1-sol, gpt-6-luna), Google (gemini-4-argon, gemini-3.8-flash), Cursor (grok-4.7, composer-2.5), Z.ai (glm-5).]
 
-[Model families: large (smart and slow) {opus, high, sol}, medium (workhorse) {sonnet, medium, glm-5, kimi-k2.5, minimax-m2.5, luna-high, grok-4.7}, small (fast, not smart) {haiku, glm-4.7, flash, mini, low, luna, composer-2.5} ]
+[Model families: large (smart and slow) {opus, high, sol, argon}, medium (workhorse) {sonnet, medium, glm-5, kimi-k2.5, minimax-m2.5, luna-high, grok-4.7}, small (fast, not smart) {haiku, glm-4.7, flash, mini, low, luna, composer-2.5} ]
 
 <[workflow]-[phase_name]>
 

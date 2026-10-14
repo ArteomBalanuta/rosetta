@@ -26,8 +26,8 @@ alwaysApply: false
 # allowed-tools: "Bash(git diff:*)"
 # model — use the FULL current model id; NEVER an alias (opus/sonnet) or a stale id: an executor on older data can't resolve aliases or newer ids and will run the wrong model [string] [Claude Code]
 # model: "claude-opus-5-5"
-# [Latest models: Anthropic (claude-opus-5-5, claude-sonnet-5-5, claude-haiku-5-5); OpenAI (gpt-6.1-sol, gpt-6-luna); Google (gemini-3.8-flash); Cursor (grok-4.7, composer-2.5); Z.ai (glm-5)]
-# [Families: large/smart/slow {opus, high, sol} · medium/workhorse {sonnet, medium, glm-5, kimi-k2.5, minimax-m2.5, luna-high, grok-4.7} · small/fast {haiku, glm-4.7, flash, mini, low, luna, composer-2.5}]
+# [Latest models: Anthropic (claude-opus-5-5, claude-sonnet-5-5, claude-haiku-5-5); OpenAI (gpt-6.1-sol, gpt-6-luna); Google (gemini-4-argon, gemini-3.8-flash); Cursor (grok-4.7, composer-2.5); Z.ai (glm-5)]
+# [Families: large/smart/slow {opus, high, sol, argon} · medium/workhorse {sonnet, medium, glm-5, kimi-k2.5, minimax-m2.5, luna-high, grok-4.7} · small/fast {haiku, glm-4.7, flash, mini, low, luna, composer-2.5}]
 
 # Execution Context (Optional — uncomment a line to enable)
 # context — set to 'fork' to run in a forked subagent context [string] [Claude Code]

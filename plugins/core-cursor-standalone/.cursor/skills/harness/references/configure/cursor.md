@@ -154,6 +154,7 @@ The `model` field accepts the following model id values:
 - `claude-haiku-5-5` - Anthropic Claude 5.5 Haiku
 - `gpt-6.1-sol` - OpenAI GPT 6.1 Sol (architect)
 - `gpt-6-luna` - OpenAI GPT 6 Luna with high reasoning efforts
+- `gemini-4-argon` - Google Gemini 4 Argon
 - `gemini-3.8-flash` - Google Gemini 3.8 Flash
 - `grok-4.7` - xAI Grok 4.7
 - `composer-2-fast` - Uses a very fast and cheap model (for simple tasks, like executing a predefined set of scripts and analyzing the output)

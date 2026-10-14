@@ -214,13 +214,19 @@ const CURSOR_GPT_MAP: Record<string, string> = {
   ),
 };
 
+// Gemini on Cursor: the Pro tier resolves to gemini-4-argon (the current Pro-tier model) and every other
+// Gemini token to gemini-3.8-flash (FR-ARCH-0057). Superseded Pro keys are retained and resolve FORWARD.
+// Argon has no effort in its id, so every effort form of each Pro-tier base token is keyed (a token such as
+// `gemini-4-argon-high` is authored in `subagent_required_model` lists and is dropped when unmapped).
 const CURSOR_GEMINI_MAP: Record<string, string> = {
+  ...effortForms(
+    ['gemini-4-argon', 'gemini-3.1-pro', 'gemini-3.1-pro-preview', 'gemini-3-pro', 'gemini-3-pro-preview'],
+    'gemini-4-argon',
+  ),
   ...effortForms(['gemini-3.8-flash', 'gemini-3.7-flash'], 'gemini-3.8-flash'),
   'gemini-3.5-flash': 'gemini-3.8-flash',
   'gemini-3-flash': 'gemini-3.8-flash',
   'gemini-3-flash-preview': 'gemini-3.8-flash',
-  'gemini-3.1-pro-preview': 'gemini-3.8-flash',
-  'gemini-3.1-pro': 'gemini-3.8-flash',
 };
 
 const CURSOR_GROK_MAP: Record<string, string> = {
@@ -288,10 +294,13 @@ const COPILOT_GPT_MAP: Record<string, string> = {
   ),
 };
 
+// Same Pro-tier split as CURSOR_GEMINI_MAP, as Copilot display names.
 const COPILOT_GEMINI_MAP: Record<string, string> = {
+  ...effortForms(
+    ['gemini-4-argon', 'gemini-3.1-pro', 'gemini-3.1-pro-preview', 'gemini-3-pro', 'gemini-3-pro-preview'],
+    'Gemini 4 Argon',
+  ),
   ...effortForms(['gemini-3.8-flash', 'gemini-3.7-flash'], 'Gemini 3.8 Flash'),
-  'gemini-3.1-pro-preview': 'Gemini 3.8 Flash',
-  'gemini-3.1-pro': 'Gemini 3.8 Flash',
   // FR-ARCH-0057 key-retention invariant: a superseded token keeps its key and resolves FORWARD to
   // the current model of its own cost tier. CURSOR_GEMINI_MAP has carried gemini-3.5-flash since the
   // forward-upgrade rewrite; Copilot's omission was the only unexplained asymmetry between the two

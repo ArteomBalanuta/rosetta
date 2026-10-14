@@ -36,7 +36,7 @@ Lightweight variant: a single architect pass produces discovery, design, specs, 
 
 </prerequisites>
 
-<solution_design phase="1" applies="ALL" subagent="architect" role="Architect producing discovery, design, specs, and plan in one pass" subagent_required_model="GPT-6.1 Sol, Claude Opus 5.5, Gemini 3.8 Flash">
+<solution_design phase="1" applies="ALL" subagent="architect" role="Architect producing discovery, design, specs, and plan in one pass" subagent_required_model="GPT-6.1 Sol, Claude Opus 5.5, Gemini 4 Argon, Gemini 3.8 Flash">
 
 Execute strongly in the specified order. A step MUST NOT start before the previous step is complete.
 

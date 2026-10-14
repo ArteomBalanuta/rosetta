@@ -48,7 +48,7 @@ Prerequisite: Rosetta Prep Steps.
 - Update `agents/TEMP/<FEATURE>/ui-aqa-state.md`; Phase 1 is not complete until its output spot-check passes.
 </data_collection>
 
-<requirements_clarification phase="2" applies="ALL" subagent="architect" role="Test requirements analyst" subagent_required_model="claude-opus-5-5, gpt-6.1-sol-high, gemini-3.8-flash-high" type="HITL">
+<requirements_clarification phase="2" applies="ALL" subagent="architect" role="Test requirements analyst" subagent_required_model="claude-opus-5-5, gpt-6.1-sol-high, gemini-4-argon-high, gemini-3.8-flash-high" type="HITL">
 - APPLY PHASE `ui-aqa-flow-requirements-clarification.md`
 - Input: user request + collected data from Phase 1. Output: clarified requirements + typed assertion list in the test plan
 - **WAIT FOR USER ANSWERS** to the clarifying questions before Phase 3.

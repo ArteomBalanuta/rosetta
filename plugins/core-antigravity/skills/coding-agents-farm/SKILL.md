@@ -51,7 +51,7 @@ YOUR INTERNAL KNOWLEDGE ABOUT MODEL NAMES, CLI FLAGS, AND TOOL VERSIONS IS STALE
 Model selection guidance — assign by COST TIER (workhorse / complex / fast); the tier is the contract, the id is a snapshot:
 - Anthropic: `claude-sonnet-5-5` (workhorse), `claude-opus-5-5` (complex), `claude-haiku-5-5` (fast)
 - OpenAI: `gpt-6-luna` (workhorse at `high` effort; fast at `low`/`medium`), `gpt-6.1-sol` (complex); reasoning effort is a separate setting (`model_reasoning_effort`), never a suffix on the id
-- Google: `gemini-3.8-flash` (workhorse and fast); no verified current id for a pro/complex tier — omit `-m` there
+- Google: `gemini-3.8-flash` (workhorse and fast), `gemini-4-argon` (complex)
 - Copilot: select via `--model`; supports claude, gpt, gemini families through GitHub
 - OpenCode: prefix with provider, e.g. `anthropic/claude-sonnet-5-5`, `openai/gpt-6-luna`
 - Goose: set in `~/.config/goose/profiles.yaml`

@@ -81,12 +81,12 @@ i.e. recorded evidence, not choices.
 ## TODO: instructions — model tier cues overlap now that one Gemini spans all three tiers
 
 The schema tier taxonomy (`docs/schemas/*.md`, `templates/shell-schemas/*.md`) keys tiers off token
-substrings: large `{opus, high, sol}`, medium `{sonnet, medium, ..., luna-high}`, small `{haiku, flash,
-mini, low, luna, ...}`. With every Gemini collapsed to `gemini-3.8-flash`, `flash` now appears at all
+substrings: large `{opus, high, sol, argon}`, medium `{sonnet, medium, ..., luna-high}`, small `{haiku, flash,
+mini, low, luna, ...}`. With every non-Pro Gemini collapsed to `gemini-3.8-flash`, `flash` now appears at all
 three efforts, so `flash` sitting only in the small tier is misleading. The same is now true of `luna`:
 the former workhorse `terra` tier was folded into `gpt-6-luna` (effort raised one step), so `luna`
 spans small (`gpt-6-luna`, `-medium`), medium (`-high`) and large (`-xhigh`) by effort alone. The dead
-`pro` cue was removed; deciding whether tier membership should key off the effort suffix instead is a
+`pro` cue was removed and `argon` (the Gemini Pro tier since 2026-10-14) joined the large cue; `flash` stays in the small tier. Deciding whether tier membership should key off the effort suffix instead is a
 taxonomy decision.
 
 ## DECIDED: r2 is pinned and must not be model-upgraded
@@ -123,9 +123,13 @@ Further open items from the independent review of this upgrade:
 - **`llms-full.txt`** (root and `docs/web/`) still names `Sonnet 4.6` / `GPT-5.4-medium`. It was already two generations stale before this upgrade.
 - **`rosettify-prompts` judge calls on a 5.5 model** keep thinking on at low effort with extra `max_tokens`; not exercised against the live API.
 
-## TODO: plugin-generator — Cursor and Copilot Gemini maps key effort forms only for the two Flash bases that are authored
+## TODO: models — Gemini 4 Argon identifiers (2026-10-14)
 
-`CURSOR_GEMINI_MAP` / `COPILOT_GEMINI_MAP` use `effortForms()` for `gemini-3.8-flash` and `gemini-3.7-flash` only. The superseded `gemini-3.5-flash`, `gemini-3-flash`, `gemini-3-flash-preview`, `gemini-3.1-pro` and `gemini-3.1-pro-preview` keys are bare. An effort-qualified form of those (for example `gemini-3.5-flash-low`, which `FR-ARCH-0057` says authors write on a superseded Flash token) is unmapped and passes through raw on Cursor and Copilot. Nothing in `instructions/r3` authors those tokens today, so no output is wrong yet. Decide whether to key all seven bases with `effortForms()` (adds 20 keys per map; update the key-count test).
+`gemini-4-argon` now takes the Gemini Pro tier (`gemini-3-pro*`, `gemini-3.1-pro*` resolve forward to it) in the generator maps and sits before `gemini-3.8-flash` on every list that also names opus. The Cursor id `gemini-4-argon` was confirmed by the owner from Cursor. The Copilot display name `Gemini 4 Argon` follows Copilot's own display-name format and is not checked against Copilot's published model list. Google had not published a public API id for Argon when this was added (limited rollout; only third-party sources name it), so `gemini -m gemini-4-argon` may be rejected; the `coding-agents-farm` skill already says to drop `-m` and relaunch on an `unknown model` rejection. `configure/cursor.md` and `configure/github-copilot.md` keep their legacy Gemini 3.1 Pro lines on purpose (superseded entries kept).
+
+## TODO: plugin-generator — Cursor and Copilot Gemini maps key effort forms for the Pro tier, Argon and two Flash bases; three superseded Flash keys are bare
+
+`CURSOR_GEMINI_MAP` / `COPILOT_GEMINI_MAP` use `effortForms()` for `gemini-4-argon`, the Pro-tier bases (`gemini-3.1-pro`, `gemini-3.1-pro-preview`, `gemini-3-pro`, `gemini-3-pro-preview`), `gemini-3.8-flash` and `gemini-3.7-flash`. The superseded `gemini-3.5-flash`, `gemini-3-flash` and `gemini-3-flash-preview` keys are bare. An effort-qualified form of those (for example `gemini-3.5-flash-low`, which `FR-ARCH-0057` says authors write on a superseded Flash token) is unmapped and passes through raw on Cursor and Copilot. Nothing in `instructions/r3` authors those tokens today, so no output is wrong yet. Decide whether to key those three bases with `effortForms()` too (adds 12 keys per map; update the key-count test).
 
 ## TODO: requirements — `MODEL.md` reference profile still mixes old and new values
 
