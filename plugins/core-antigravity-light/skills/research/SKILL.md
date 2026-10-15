@@ -18,7 +18,7 @@ Systematic research: grounded references, multiple-options analysis, self-valida
 <core_concepts>
 
 - All Rosetta prep steps MUST be FULLY completed, load-project-context skill loaded and fully executed
-- Meta-prompting approach: prepare an optimized research prompt enforcing all rules below, then execute it directly in the current researcher context (subagents cannot dispatch subagents; the workflow owns dispatch)
+- Meta-prompting approach: prepare an optimized research prompt enforcing all rules below, then execute it per the caller: when invoked as a spawned researcher, execute the prepared prompt directly in this context (subagents cannot dispatch subagents); when invoked directly by a top-level agent, the prepared prompt MAY be dispatched to a `researcher` subagent under orchestration (the top-level agent owns dispatch).
 - Capability-aware source tooling: prefer DeepWiki and Context7 when those integrations are available in the current environment; otherwise fall back to project documentation, vendor docs, and web search, and name the source actually used.
 - MUST NOT update CONTEXT.md, ARCHITECTURE.md, IMPLEMENTATION.md, and create any other documents EXCEPT those mentioned explicitly
 
@@ -42,7 +42,7 @@ Research rules:
 - Search documentation for libraries, versions, and issues not in built-in knowledge
 - MUST be cautious of LLM context: use grep, search, and similar techniques and tools
 - Ask user questions during research to resolve unknowns and validate direction
-- When individual ideas or areas would benefit from parallel exploration, propose bounded parallel slices (scope, dependencies, expected evidence, write-collision risk) back to the top-level orchestrator; do NOT spawn subagents from here (subagents cannot dispatch subagents).
+- When individual ideas or areas would benefit from parallel exploration: as a spawned researcher, propose bounded parallel slices (scope, dependencies, expected evidence, write-collision risk) back to the parent — do NOT spawn subagents from here (subagents cannot dispatch subagents); as a top-level agent, dispatch those slices to `researcher` subagents under orchestration.
 - Use synthesis and comparison approach
 
 Enforcement rules for the generated research prompt:
