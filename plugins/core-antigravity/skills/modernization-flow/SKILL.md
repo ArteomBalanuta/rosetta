@@ -28,7 +28,7 @@ This modernization process is designed to systematically analyze, specify, and i
 
 - If user did not specify any preferences perform all steps except optional.
 - User CAN customize and ask only for specific steps OR steps could have been done already OR towards specific goal OR for specific case, in this case LISTEN and ADOPT to the user.
-- Modernization scope could be small or could be done in place (example: upgrade Java 8 to 17 or 17 to 21), in this case only use `Phase 2` and `Phase 6`, unless you discover dependencies and project becomes bigger.
+- Modernization scope could be small or could be done in place (example: upgrade Java 8 to 17 or 17 to 21), in this case only use `Phase 2` and `Phase 6`, unless you discover dependencies and project becomes bigger. This reduced route is an explicit exception to the phase-prerequisite contract: Phase 2 runs without Phase 1 ONLY after recording that no reusable reference-library analysis is needed (no prior reference specs exist and none is requested), and Phase 6 runs without Phase 5 ONLY under a bounded single-project final-review contract — cross-project findings are replaced by an explicit note that mapping is scoped to this project alone. Record both decisions in the state file so the exception is auditable.
 - If there is no need to rewrite code (example: upgrade .NET 6 to .NET 8), then take original and target code specs LIGHTLY, only document WHAT IS NECESSARY TO CHANGE (example: new way to use app builder).
 
 ## Modernization Flow - Phase Overview

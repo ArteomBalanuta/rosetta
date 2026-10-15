@@ -1,5 +1,5 @@
 # research
-Meta-prompting skill: craft an optimized research prompt first, then execute it as a separate subagent — never research directly.
+Meta-prompting skill: craft an optimized research prompt first, then execute it directly in the current researcher context — never research directly, and never dispatch nested subagents (the workflow owns dispatch).
 
 Researches any question grounded in your project, with real sources. Compares options and validates its own conclusions.
 
@@ -10,14 +10,14 @@ Fixes the failure mode where an AI treats its training-data knowledge as suffici
 Actor: the `researcher` subagent (`mode: subagent`, `readonly: false`). Trigger: systematic research needing grounded references, multi-option analysis, and self-validation; skip for simple lookups or single-source questions. Prerequisite: "All Rosetta prep steps MUST be FULLY completed, load-project-context skill loaded and fully executed." Not meant for casual direct invocation — `prompts/self-help-flow.prompt.md` flags `/research ...` as a BAD example because "using the skill directly bypasses the structured research workflow; PRIORITY RULE applies," steering real usage through `research-flow` instead.
 
 ## How it works
-Single flat SKILL.md, no `assets/` or `references/`. Flow: `<role>` (senior research specialist, meta-prompting) → `<when_to_use_skill>` gate → `<core_concepts>` (prep-step prerequisite, meta-prompting approach, a hard restriction against touching CONTEXT.md/ARCHITECTURE.md/IMPLEMENTATION.md) → `<process>`, itself split in two: "Research rules" govern how research is actually carried out (plan, tree-of-thoughts with ≥3 options, ongoing `research-state.md`, save to `docs/<feature>-research.md`, grounding/HITL discipline, parallel subagents) and "Enforcement rules for the generated research prompt" are 5 MUSTs that this skill bakes into the prompt it hands off, not into its own execution. Invoked by the `researcher` subagent inside `research-flow` phase 3 (`execute_research`), and ad hoc by orchestration's team-manager asset for external-knowledge lookups.
+Single flat SKILL.md, no `assets/` or `references/`. Flow: `<role>` (senior research specialist, meta-prompting) → `<when_to_use_skill>` gate → `<core_concepts>` (prep-step prerequisite, meta-prompting approach, a hard restriction against touching CONTEXT.md/ARCHITECTURE.md/IMPLEMENTATION.md) → `<process>`, itself split in two: "Research rules" govern how research is actually carried out (plan, tree-of-thoughts with ≥3 options, ongoing `research-state.md`, save to `docs/<feature>-research.md`, grounding/HITL discipline, parallel-slice proposals returned to the orchestrator) and "Enforcement rules for the generated research prompt" are 5 MUSTs that this skill bakes into the prompt it hands off, not into its own execution. Invoked by the `researcher` subagent inside `research-flow` phase 3 (`execute_research`), and ad hoc by orchestration's team-manager asset for external-knowledge lookups.
 
 ## Mental hooks & unexpected rules
 - "craft an optimized research prompt first, then execute it — never research directly" — this skill's real output is a prompt, not an answer; answering research questions inline is out of contract.
 - "MUST NOT update CONTEXT.md, ARCHITECTURE.md, IMPLEMENTATION.md, and create any other documents EXCEPT those mentioned explicitly" — research output is deliberately walled off from the project's core docs.
 - "Follow tree-of-thoughts pattern and analyze at least 3 options" — a single correct-looking option still fails the skill's contract.
 - "Fall back to anecdotal references, but call this out EXPLICITLY!" — anecdote is permitted only with a loud disclaimer, never silently blended with reputable sources.
-- "MUST use DeepWiki and Context7" — a named-tool mandate written into the generated research prompt, not a suggestion.
+- "MUST use authoritative sources available to the current environment" — a capability-aware source mandate written into the generated research prompt: DeepWiki and Context7 preferred when available, explicit fallbacks otherwise.
 - "MUST think about and align consequences and consequences of consequences to prevent oversight" — second-order-effects analysis is required of the crafted prompt, not optional depth.
 
 ## Invariants — do not change
