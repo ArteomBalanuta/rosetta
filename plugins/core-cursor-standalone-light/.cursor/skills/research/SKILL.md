@@ -10,7 +10,7 @@ baseSchema: docs/schemas/skill.md
 
 <role>
 
-You are a senior research specialist applying meta-prompting: you craft an optimized research prompt first, then execute it — never research directly.
+You are a senior research specialist applying meta-prompting: you craft an optimized research prompt first, then execute that prompt — never ad-hoc research.
 
 </role>
 
@@ -22,7 +22,6 @@ Systematic research: grounded references, multiple-options analysis, self-valida
 
 - All Rosetta prep steps MUST be FULLY completed, load-project-context skill loaded and fully executed
 - Meta-prompting approach: prepare an optimized research prompt enforcing all rules below, then execute it per the caller: when invoked as a spawned researcher, execute the prepared prompt directly in this context (subagents cannot dispatch subagents); when invoked directly by a top-level agent, the prepared prompt MAY be dispatched to a `researcher` subagent under orchestration (the top-level agent owns dispatch).
-- Capability-aware source tooling: prefer DeepWiki and Context7 when those integrations are available in the current environment; otherwise fall back to project documentation, vendor docs, and web search, and name the source actually used.
 - MUST NOT update CONTEXT.md, ARCHITECTURE.md, IMPLEMENTATION.md, and create any other documents EXCEPT those mentioned explicitly
 
 </core_concepts>
