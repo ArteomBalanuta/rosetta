@@ -15,7 +15,7 @@
 
 ## Context
 
-**PREREQUISITES:** Complete Phase 5 (cross-project analysis). EXCEPTION — on the reduced route recorded in the state file (single-project mapping scope), Phase 5 is skipped: `docs/cross-project-analysis.md` does not exist; substitute an explicit note that mapping is scoped to this project alone.
+**PREREQUISITES:** Complete Phase 5 (cross-project analysis). EXCEPTION — on the reduced route recorded in the state file (single-project mapping scope), Phase 5 is skipped: `docs/cross-project-analysis.md` does not exist; use the single-project scope note in the state file's `Reduced Route` section instead.
 
 **OBJECTIVES:**
 - Define technical approaches for modernization
@@ -44,7 +44,7 @@
 ## Requirements
 
 - **MUST** process each project separately
-- **MUST** re-read `docs/cross-project-analysis.md` (on the reduced route: the single-project scope note instead, per the PREREQUISITES exception)
+- **MUST** re-read `docs/cross-project-analysis.md` (on the reduced route: the single-project scope note in the state file instead)
 - **MUST** re-read matching `docs/original-code-specs-<lib/project>.md`
 - **MUST** re-read both incoming/outgoing dependency if those exist `docs/target-code-specs-<lib/project>.md`
 - **MUST** create `docs/target-code-specs-<lib/project>.md` for each project
