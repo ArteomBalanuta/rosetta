@@ -15,21 +15,41 @@ from ..rosetta_config import DEFAULT_PARSE_TIMEOUT
 from ..typing_utils import DatasetLike, DocumentLike, JsonDict
 
 
-def _extract_doc_tags(document: DocumentLike) -> set[str]:
-    """Tags of a document, lowercased. meta_fields may be a dict, a JSON
-    string, or an object with attributes (same tolerance as the MCP-side
-    helper in rosetta_mcp/tools/instructions.py)."""
+def _doc_meta(document: DocumentLike) -> object:
+    """meta_fields of a document. May be a dict, a JSON string, or an object
+    with attributes (same tolerance as the MCP-side helper in
+    rosetta_mcp/tools/instructions.py); invalid JSON yields {}."""
     meta = getattr(document, "meta_fields", {}) or {}
     if isinstance(meta, str):
         try:
             meta = json.loads(meta)
         except Exception:
             meta = {}
+    return meta
+
+
+def _meta_value(meta: object, key: str) -> object:
     if isinstance(meta, dict):
-        tags = meta.get("tags", [])
-    else:
-        tags = getattr(meta, "tags", []) or []
+        return meta.get(key)
+    return getattr(meta, key, None)
+
+
+def _extract_doc_tags(document: DocumentLike) -> set[str]:
+    """Tags of a document, lowercased."""
+    tags = _meta_value(_doc_meta(document), "tags") or []
+    if not isinstance(tags, (list, tuple, set)):
+        return set()
     return {str(tag).strip().lower() for tag in tags if str(tag).strip()}
+
+
+def _extract_doc_title(document: DocumentLike) -> str:
+    """doc_title metadata (what the server-side prefix filter matches),
+    falling back to the document name. RAGFlow may rename a document on a
+    display-name collision (e.g. SKILL(7).md), so name can differ."""
+    title = _meta_value(_doc_meta(document), "doc_title")
+    if title:
+        return str(title)
+    return str(getattr(document, "name", "") or "")
 
 
 class DocumentService:
@@ -104,8 +124,9 @@ class DocumentService:
         Filter documents by title prefix.
 
         Sends a server-side metadata hint and enforces the prefix client-side:
-        RAGFlow 0.25 ignores metadata_condition server-side (see the notes in
-        ragflow_client.py), so the returned list must be re-filtered.
+        RAGFlow applies metadata_condition only when at least one document
+        matches; when none match, it returns the whole dataset
+        (infiniflow/ragflow#14962), so the returned list must be re-filtered.
         
         Args:
             dataset: Dataset object
@@ -132,7 +153,7 @@ class DocumentService:
         
         return [
             document for document in (documents or [])
-            if str(getattr(document, "name", "")).startswith(prefix)
+            if _extract_doc_title(document).startswith(prefix)
         ]
     
     def filter_documents_by_tags(
@@ -145,8 +166,9 @@ class DocumentService:
         Filter documents by tags.
 
         Sends a server-side metadata hint and enforces the tags client-side:
-        RAGFlow 0.25 ignores metadata_condition server-side (see the notes in
-        ragflow_client.py), so the returned list must be re-filtered.
+        RAGFlow applies metadata_condition only when at least one document
+        matches; when none match, it returns the whole dataset
+        (infiniflow/ragflow#14962), so the returned list must be re-filtered.
         
         Uses "or" logic to find documents containing ANY of the specified tags.
         

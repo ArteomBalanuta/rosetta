@@ -1,8 +1,9 @@
-"""cleanup-dataset call-site regression for client-side metadata filtering (#312).
+"""cleanup-dataset delete-path regression for client-side metadata filtering (#312).
 
-The command must never present (or delete) documents outside the requested
-tag/prefix scope, even when the server returns the full list unfiltered
-(RAGFlow 0.25 ignores metadata_condition server-side)."""
+RAGFlow applies metadata_condition only when at least one document matches;
+when none match, it returns the whole dataset (infiniflow/ragflow#14962).
+The command must hand dataset.delete_documents only the in-scope ids, and
+nothing at all when nothing matches."""
 
 from argparse import Namespace
 from types import SimpleNamespace
@@ -10,39 +11,66 @@ from unittest.mock import Mock
 
 import pytest
 from rosetta_cli.commands.cleanup_command import CleanupCommand
-from rosetta_cli.services.document_service import DocumentService
 
 
 def _doc(doc_id: str, name: str, tags: list[str]) -> SimpleNamespace:
-    return SimpleNamespace(id=doc_id, name=name, meta_fields={"tags": tags})
+    return SimpleNamespace(
+        id=doc_id, name=name, meta_fields={"tags": tags, "doc_title": name}
+    )
+
+
+def _run_cleanup(monkeypatch, tags, prefix):
+    """Run execute() end to end with --force; the server returns every document."""
+    all_documents = [
+        _doc("1", "core/skills/keep.md", ["r1"]),
+        _doc("2", "guide-a.md", ["r2"]),
+        _doc("3", "manual.md", ["other"]),
+    ]
+    client = Mock()
+    client.list_documents.return_value = all_documents
+    dataset = Mock()
+    client.get_dataset.return_value = dataset
+
+    monkeypatch.setattr(
+        "rosetta_cli.services.auth_service.AuthService.verify_or_exit",
+        lambda client, config: None,
+    )
+    monkeypatch.setattr(
+        "rosetta_cli.commands.cleanup_command.DatasetService.resolve_dataset_name",
+        lambda self, name: (name, False),
+    )
+
+    command = CleanupCommand(
+        client,
+        SimpleNamespace(page_size=1000, environment="test", base_url="http://x"),
+    )
+    args = Namespace(
+        dataset="aia-r2", tags=tags, prefix=prefix, dry_run=False, force=True
+    )
+    return command.execute(args), dataset
 
 
 @pytest.mark.parametrize(
-    "args,expected_ids",
+    "tags,prefix,expected_ids",
     [
-        (Namespace(tags="r1", prefix=None), ["1"]),
-        (Namespace(tags=None, prefix="guide-"), ["2"]),
+        ("r1", None, ["1"]),
+        ("r1,r2", None, ["1", "2"]),
+        (None, "core/skills/", ["1"]),
+        (None, "guide-", ["2"]),
     ],
 )
-def test_filtered_cleanup_never_returns_out_of_scope_documents(
-    monkeypatch, args, expected_ids
-):
-    client = Mock()
-    client.list_documents.return_value = [
-        _doc("1", "keep.md", ["r1"]),
-        _doc("2", "guide-a.md", []),
-        _doc("3", "manual.md", ["other"]),
-    ]
+def test_delete_receives_only_matching_ids(monkeypatch, tags, prefix, expected_ids):
+    exit_code, dataset = _run_cleanup(monkeypatch, tags, prefix)
 
-    monkeypatch.setattr(
-        "rosetta_cli.commands.cleanup_command.DocumentService",
-        lambda _client: DocumentService(client),
-    )
+    assert exit_code == 0
+    dataset.delete_documents.assert_called_once_with(ids=expected_ids)
 
-    command = CleanupCommand(SimpleNamespace(), SimpleNamespace(page_size=1000))
 
-    filtered = command._get_filtered_documents(
-        SimpleNamespace(), SimpleNamespace(), args
-    )
+@pytest.mark.parametrize(
+    "tags,prefix", [("typo-tag", None), (None, "no-such-prefix/")]
+)
+def test_zero_match_full_list_deletes_nothing(monkeypatch, tags, prefix):
+    exit_code, dataset = _run_cleanup(monkeypatch, tags, prefix)
 
-    assert [d.id for d in filtered] == expected_ids
+    assert exit_code == 0
+    dataset.delete_documents.assert_not_called()
